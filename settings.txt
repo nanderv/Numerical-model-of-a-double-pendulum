@@ -1,0 +1,23 @@
+true
+true
+0
+0
+2
+0
+50
+30
+100
+0.001
+#
+Model type (nander)
+Clear screen after each frame
+starting angle 1
+Starting angle 2
+Starting speed 1
+Starting speed 2
+Length 1
+Length 2
+Framerate on screen
+dt (1/dt has to be higher than the framerate, otherwise it doesn't work).
+
+        App.Draw(sf::Shape::Circle(400+1000*now2.l1*sin(now2.a1)+1000*now2.l2*sin(now2.a2), 300+1000*now2.l1*cos(now2.a1)+1000*now2.l2*cos(now2.a2), 6, sf::Color::Blue));

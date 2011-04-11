@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1302461276 source:g:\_nander\model\main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1302461276 
+
+1302462258 source:/media/mespace sf/School/O&O/Model/Model/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1302547215 source:/home/nander/Desktop/Model/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+
