@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
 #define G 9.81
 #define pi 3.14159265359
 using namespace std;
@@ -61,14 +62,13 @@ stamp calcnextStepNan(stamp now, double timestep){
     p_now.x2=now.l1*sin(now.a1)+now.l2*sin(now.a2); // Old position of the middle + new position of the end V
     p_now.y2=now.l1*cos(now.a1)+now.l2*cos(now.a2); // V
 
-
     now.a1+=now.v1*timestep; // move point 1 // V
 
     p_now.x1=now.l1*sin(now.a1); // V
     p_now.y1=now.l1*cos(now.a1); // V
     double new_angle=atan((p_now.x2-p_now.x1)/(p_now.y2-p_now.y1)); // calculate the new angle
     now.v2 = new_angle-now.a2+(now.a2-aa)/timestep;// bug fixed, but they still behave differently.
-
+now.now+= timestep;
     return now;
 }
 
@@ -85,12 +85,17 @@ void Debug(stamp now)
 
 int main()
 {
+    ofstream nanfile;
+  nanfile.open ("nan.pos");
+  ofstream diffile;
+  diffile.open ("dif.pos");
+
     // Create main window
     cout <<" now.a1, now.a2, now.v1, now.v2, now2.a1, now2.a2, now2.v1, now2.v2"<<endl;
     sf::RenderWindow App(sf::VideoMode(800, 600), "Numeriek model");
     stamp now;
     now.a1=0; // Starting angle 1
-    now.damp=0.0000; // Damping value
+    now.damp=0.0001; // Damping value
     now.a2=0.5*pi;  // Starting angle 2
     now.v1=4*2*pi;// (starting) speed 1
     now.v2=0; // (starting) speed 2
@@ -116,6 +121,7 @@ bool debug=true; // Echo the output to a command line; May be slow, but is very 
             // Close window : exit
             if (Event.Type == sf::Event::Closed)
                 App.Close();
+
         }
 
         // Clear screen
@@ -123,10 +129,13 @@ bool debug=true; // Echo the output to a command line; May be slow, but is very 
 
 // Calculate the next steps
     for(int i=1;i<(1/timestep)/rate;i++){
-        if(nan)        now=calcnextStepNan(now,timestep);
+        if(nan)  {      now=calcnextStepNan(now,timestep);
+        nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
+        }
 
+    if(dif) {       now2=calcnextStepDif(now2,timestep);
+            diffile <<now2.now<<", "<<now2.l1*sin(now2.a1)+now2.l2*sin(now2.a2)<<", "<<now2.l1*cos(now2.a1)+now2.l2*cos(now2.a2)<< endl;}
 
-    if(dif)        now2=calcnextStepDif(now2,timestep);
     }
          if(debug)   Debug(now,now2);
 
