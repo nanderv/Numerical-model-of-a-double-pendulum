@@ -108,6 +108,7 @@ int main()
     bool clear=true; // Clear the screen?
     double scale = 200/(now.l1+now.l2); // Calculate screen scale
     double timestep = 0.0002; // Number of  seconds per calculated frame.
+    bool exporttofile = true;
     stamp now2=now; // Second now (so each model starts with the same starting parameters)
 bool debug=true; // Echo the output to a command line; May be slow, but is very useful.
 // Main app loop
@@ -130,11 +131,11 @@ bool debug=true; // Echo the output to a command line; May be slow, but is very 
 // Calculate the next steps
     for(int i=1;i<(1/timestep)/rate;i++){
         if(nan)  {      now=calcnextStepNan(now,timestep);
-        nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
+     if(exporttofile)   nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
         }
 
     if(dif) {       now2=calcnextStepDif(now2,timestep);
-            diffile <<now2.now<<", "<<now2.l1*sin(now2.a1)+now2.l2*sin(now2.a2)<<", "<<now2.l1*cos(now2.a1)+now2.l2*cos(now2.a2)<< endl;}
+            if(exporttofile) diffile <<now2.now<<", "<<now2.l1*sin(now2.a1)+now2.l2*sin(now2.a2)<<", "<<now2.l1*cos(now2.a1)+now2.l2*cos(now2.a2)<< endl;}
 
     }
          if(debug)   Debug(now,now2);
