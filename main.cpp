@@ -83,8 +83,53 @@ void Debug(stamp now)
     cout <<"A1 "<<now.a1<<", A2 "<<now.a2<<", V1 "<<now.v1<<", V2"<<now.v2<<endl;
 }
 
-int main()
-{
+int main(int argc, char *argv[]){
+    stamp now;
+
+const char* filename ;
+if(argc>0){
+  filename = argv[0];
+} else
+int i=0;
+filename = "model.txt";
+fstream settingfile;
+char str[2000];
+settingfile.open(filename);
+settingfile>>str;
+now.a1=atof(str);
+settingfile>>str;
+now.a2=atof(str);
+settingfile>>str;
+now.v1=atof(str);
+settingfile>>str;
+now.v2=atof(str);
+settingfile>>str;
+now.l1=atof(str);
+settingfile>>str;
+now.l2=atof(str);
+settingfile>>str;
+double rate=atof(str);
+settingfile>>str;
+bool clear=false;
+bool nan=false;
+bool dif=false;
+bool exporttofile=false;
+if(atoi(str)==1)  clear=true;
+settingfile>>str;
+if(atoi(str)==1)  nan=true;
+settingfile>>str;
+if(atoi(str)==1) dif=true;
+settingfile>>str;
+if(atoi(str)==1)  exporttofile=true;
+
+settingfile>>str;
+double timestep=atof(str);
+
+settingfile>>str;
+now.damp=atof(str);
+
+
+
     ofstream nanfile;
   nanfile.open ("nan.pos");
   ofstream diffile;
@@ -93,8 +138,7 @@ int main()
     // Create main window
     cout <<" now.a1, now.a2, now.v1, now.v2, now2.a1, now2.a2, now2.v1, now2.v2"<<endl;
     sf::RenderWindow App(sf::VideoMode(800, 600), "Numeriek model");
-    stamp now;
-    now.a1=0; // Starting angle 1
+   /* now.a1=0; // Starting angle 1
     now.damp=0.0001; // Damping value
     now.a2=0.5*pi;  // Starting angle 2
     now.v1=4*2*pi;// (starting) speed 1
@@ -102,16 +146,17 @@ int main()
     bool nan=true; // Does Nanders Algorithm run?
     bool dif=true; // Does the differential equotation run?
     now.l1 = 0.02; // Length 1
-    now.l2=0.10; // Length 2
-    float rate=200; // Frames per sedond
-    float timespeed=10; // Slowdown (10 = ten times slower then normal)
-    bool clear=true; // Clear the screen?
+    now.l2=0.10; // Length 2*/
+    //float rate=200; // Frames per sedond
+   float timespeed=1; // Slowdown (10 = ten times slower then normal)
+    /*bool clear=true; // Clear the screen?*/
     double scale = 200/(now.l1+now.l2); // Calculate screen scale
-    double timestep = 0.0002; // Number of  seconds per calculated frame.
-    bool exporttofile = true;
+    //double timestep = 0.0002; // Number of  seconds per calculated frame.
+    /*bool exporttofile = true;*/
     stamp now2=now; // Second now (so each model starts with the same starting parameters)
 bool debug=true; // Echo the output to a command line; May be slow, but is very useful.
 // Main app loop
+
     while (App.IsOpened())
     {
         // Process events

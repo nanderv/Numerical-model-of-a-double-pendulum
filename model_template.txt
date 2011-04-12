@@ -1,0 +1,13 @@
+a1
+a2
+v1
+v2
+l1 (mm)
+l2 (mm)
+rate
+clear
+nan
+dif
+exporttofile
+timerate
+damping (const?)
