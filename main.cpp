@@ -52,24 +52,35 @@ stamp calcnextStepDif(stamp now, double timestep){
 /*
 Everything works except for one line.. It's clearly visible which one :)
 */
+double normangle(double ang){
+while(ang>=2*pi)ang -=2*pi;
+while(ang<0) ang += 2*pi;
+return ang;
+}
+
 stamp calcnextStepNan(stamp now, double timestep){
-    pos p_now; // a position variable // V
-    double aa = now.a2;
-    double vg= sin(now.a2)*pi*pi*sqrt(G/now.l2);// V
-    now.v2-=vg*timestep; // V
-    now.v2 -= now.v2*timestep*now.damp;// V
-    now.a2+=now.v2*timestep; // V
-    p_now.x2=now.l1*sin(now.a1)+now.l2*sin(now.a2); // Old position of the middle + new position of the end V
-    p_now.y2=now.l1*cos(now.a1)+now.l2*cos(now.a2); // V
+pos pos;
+now.now=now.now+timestep;
+double vg=sin(now.a2)*pi*(6.02-pi)*sqrt(G/now.l2);
+ now.v2-=vg*timestep;
+ now.v2-=now.damp*timestep*now.v2;
+ double aa=now.a2;
+ now.a2+=now.v2*timestep;
+ now.a1+=now.v1*timestep;
+ pos.x1=now.l1*sin(now.a1-now.v1*timestep)+now.l2*sin(now.a2);
+ pos.y1=now.l1*sin(now.a1-now.v1*timestep)+now.l2*sin(now.a2);
+ pos.x2=now.l1*sin(now.a1);
+ pos.y2=now.l1*cos(now.a1);
+ double r_angle=now.v2;
+ if((pos.y1-pos.y2)!= 0)
+r_angle=atan((pos.x1-pos.x2)/(pos.y1-pos.y2));
+else r_angle=atan((pos.x1-pos.x2)/(1e-21));
 
-    now.a1+=now.v1*timestep; // move point 1 // V
+double a_angle = pi*pi*timestep*(r_angle-now.a2);
+cout<<r_angle<<", "<<aa<<endl;
+now.v2+=a_angle;
+return now;
 
-    p_now.x1=now.l1*sin(now.a1); // V
-    p_now.y1=now.l1*cos(now.a1); // V
-    double new_angle=atan((p_now.x2-p_now.x1)/(p_now.y2-p_now.y1)); // calculate the new angle
-    now.v2 = new_angle-now.a2+(now.a2-aa)/timestep;// bug fixed, but they still behave differently.
-now.now+= timestep;
-    return now;
 }
 
 // Cout some debug values; very useful. Run program as ./Model > test.txt to store the info in test.txt
@@ -85,83 +96,78 @@ void Debug(stamp now)
 
 int main(int argc, char *argv[]){
     stamp now;
+// Filename variable
+    const char* filename ;
 
-const char* filename ;
-if(argc>0){
-  filename = argv[0];
-} else
-int i=0;
-filename = "model.txt";
-fstream settingfile;
-char str[2000];
-settingfile.open(filename);
-settingfile>>str;
-now.a1=atof(str);
-settingfile>>str;
-now.a2=atof(str);
-settingfile>>str;
-now.v1=atof(str);
-settingfile>>str;
-now.v2=atof(str);
-settingfile>>str;
-now.l1=atof(str);
-settingfile>>str;
-now.l2=atof(str);
-settingfile>>str;
-double rate=atof(str);
-settingfile>>str;
-bool clear=false;
-bool nan=false;
-bool dif=false;
-bool exporttofile=false;
-if(atoi(str)==1)  clear=true;
-settingfile>>str;
-if(atoi(str)==1)  nan=true;
-settingfile>>str;
-if(atoi(str)==1) dif=true;
-settingfile>>str;
-if(atoi(str)==1)  exporttofile=true;
+// Did the user specify a filename?
+    if(argc>1){
+        filename = argv[1];
 
-settingfile>>str;
-double timestep=atof(str);
+    } else
+        filename = "model.txt";
+    fstream settingfile;
 
-settingfile>>str;
-now.damp=atof(str);
+// Read all settings from file
+    char str[2000];
+    settingfile.open(filename);
+    settingfile>>str;
+    now.a1=atof(str);
+    settingfile>>str;
+    now.a2=atof(str);
+    settingfile>>str;
+    now.v1=atof(str);
+    settingfile>>str;
+    now.v2=atof(str);
+    settingfile>>str;
+    now.l1=atof(str);
+    settingfile>>str;
+    now.l2=atof(str);
+    settingfile>>str;
+    float rate=atof(str);
+    settingfile>>str;
+    bool clear=false;
+    bool nan=false;
+    bool dif=false;
+    bool exporttofile=false;
+    if(atoi(str)==1)  clear=true;
+        settingfile>>str;
+    if(atoi(str)==1)  nan=true;
+        settingfile>>str;
+    if(atoi(str)==1) dif=true;
+        settingfile>>str;
+    if(atoi(str)==1)  exporttofile=true;
+        settingfile>>str;
+    double timestep=atof(str);
+    cout << "timestep"<<timestep<<endl;
+    settingfile>>str;
+    now.damp=atof(str);
 
 
-
+// Open files to debug into.
     ofstream nanfile;
-  nanfile.open ("nan.pos");
-  ofstream diffile;
-  diffile.open ("dif.pos");
+    nanfile.open ("nan.pos");
+    ofstream diffile;
+    diffile.open ("dif.pos");
 
-    // Create main window
+
+    // cout the header of the debug table
     cout <<" now.a1, now.a2, now.v1, now.v2, now2.a1, now2.a2, now2.v1, now2.v2"<<endl;
+    // Create the main window
     sf::RenderWindow App(sf::VideoMode(800, 600), "Numeriek model");
-   /* now.a1=0; // Starting angle 1
-    now.damp=0.0001; // Damping value
-    now.a2=0.5*pi;  // Starting angle 2
-    now.v1=4*2*pi;// (starting) speed 1
-    now.v2=0; // (starting) speed 2
-    bool nan=true; // Does Nanders Algorithm run?
-    bool dif=true; // Does the differential equotation run?
-    now.l1 = 0.02; // Length 1
-    now.l2=0.10; // Length 2*/
-    //float rate=200; // Frames per sedond
-   float timespeed=1; // Slowdown (10 = ten times slower then normal)
-    /*bool clear=true; // Clear the screen?*/
-    double scale = 200/(now.l1+now.l2); // Calculate screen scale
-    //double timestep = 0.0002; // Number of  seconds per calculated frame.
-    /*bool exporttofile = true;*/
-    stamp now2=now; // Second now (so each model starts with the same starting parameters)
-bool debug=true; // Echo the output to a command line; May be slow, but is very useful.
-// Main app loop
 
+// Slow motion?
+    float timespeed=1; // Slowdown (10 = ten times slower then normal)
+// Calculate screen scale
+    double scale = 200/(now.l1+now.l2); // Calculate screen scale
+ // Copy stamp; one for each model
+    stamp now2=now; // Second now (so each model starts with the same starting parameters)
+    bool debug=false; // Echo the output to a command line; May be slow, but is very useful.
+
+// Start the main loop
     while (App.IsOpened())
     {
-        // Process events
+        // Receive exit events
         sf::Event Event;
-        // We prefer programs to close if we hit the 'x'
         while (App.GetEvent(Event))
         {
             // Close window : exit
@@ -176,7 +182,7 @@ bool debug=true; // Echo the output to a command line; May be slow, but is very 
 // Calculate the next steps
     for(int i=1;i<(1/timestep)/rate;i++){
         if(nan)  {      now=calcnextStepNan(now,timestep);
-     if(exporttofile)   nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
+            if(exporttofile)   nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
         }
 
     if(dif) {       now2=calcnextStepDif(now2,timestep);
@@ -188,27 +194,28 @@ bool debug=true; // Echo the output to a command line; May be slow, but is very 
     // Draw the things to the screen
     if(nan){
         App.Draw(sf::Shape::Line(400, 300, 400+scale*now.l1*sin(now.a1), 300+scale*now.l1*cos(now.a1), 5, sf::Color::Red));
+        App.Draw(sf::Shape::Circle(400, 300, 6, sf::Color::Yellow));
         App.Draw(sf::Shape::Line(400+scale*now.l1*sin(now.a1), 300+scale*now.l1*cos(now.a1),400+scale*now.l1*sin(now.a1)+scale*now.l2*sin(now.a2), 300+scale*now.l1*cos(now.a1)+scale*now.l2*cos(now.a2), 5, sf::Color::Green));
 
-        App.Draw(sf::Shape::Circle(400, 300, 6, sf::Color::Yellow));
+
 
         App.Draw(sf::Shape::Circle(400+scale*now.l1*sin(now.a1)+scale*now.l2*sin(now.a2), 300+scale*now.l1*cos(now.a1)+scale*now.l2*cos(now.a2), 6, sf::Color::Blue));
 
     }
     if(dif){
 
-
+        App.Draw(sf::Shape::Line(400, 300, 400+scale*now2.l1*sin(now2.a1), 300+scale*now2.l1*cos(now2.a1), 5, sf::Color::Red));
+        App.Draw(sf::Shape::Circle(400, 300, 6, sf::Color::Yellow));
         App.Draw(sf::Shape::Line(400+scale*now2.l1*sin(now2.a1), 300+scale*now2.l1*cos(now2.a1),400+scale*now2.l1*sin(now2.a1)+scale*now2.l2*sin(now2.a2), 300+scale*now2.l1*cos(now2.a1)+scale*now2.l2*cos(now2.a2), 5, sf::Color::Yellow));
 
-    App.Draw(sf::Shape::Circle(400+scale*now2.l1*sin(now2.a1)+scale*now2.l2*sin(now2.a2), 300+scale*now2.l1*cos(now2.a1)+scale*now2.l2*cos(now2.a2), 6, sf::Color::Red));
+        App.Draw(sf::Shape::Circle(400+scale*now2.l1*sin(now2.a1)+scale*now2.l2*sin(now2.a2), 300+scale*now2.l1*cos(now2.a1)+scale*now2.l2*cos(now2.a2), 6, sf::Color::Red));
 
     }
         // Finally, display the rendered frame on screen
         App.Display();
-
-        sf::Sleep((1/rate)*timespeed);
+sf::Sleep((1/rate)*timespeed);
     }
  // The end
- cout <<" THE END; Ended after "<<now2.now/timestep<<" Frames"<< endl;
+    cout <<" THE END; Ended after "<<now2.now/timestep<<" Frames"<< endl;
     return EXIT_SUCCESS;
 }

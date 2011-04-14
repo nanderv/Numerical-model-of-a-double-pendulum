@@ -5,8 +5,8 @@ v2
 l1 (mm)
 l2 (mm)
 rate
-clear
 nan
+clear
 dif
 exporttofile
 timerate
