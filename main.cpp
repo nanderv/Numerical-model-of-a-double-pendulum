@@ -31,6 +31,7 @@ struct stamp{
     double l2; // length 2 (absolute)
     double now; // Makes dif algorithm easier
     double damp; //damping const..
+    double pusher;
 };
 // Position struct - Just for easy calculations
 struct pos{
@@ -48,10 +49,11 @@ stamp calcnextStepDif(stamp now, double timestep){
     double A = now.l1;
     double a = (2*pi*f)*(2*pi*f)*A/now.l2;
     double omega0 = sqrt(G/now.l2);
-    double acc=a*sin(2*pi*f*now.now-now.a2)-now.damp*now.v1*timestep-omega0*omega0*sin(now.a2);
+    double acc=a*sin(2*pi*f*now.now-now.a2)-now.damp*now.v2*timestep-omega0*omega0*sin(now.a2);
     now.v2=now.v2+acc*timestep;
     now.a2=now.a2+now.v2*timestep;
     now.a1=now.a1+now.v1*timestep;
+    now.v2 += (now.v1-now.v2)*now.pusher*timestep;
     return now;
 }
 
@@ -147,7 +149,8 @@ int main(int argc, char *argv[]){
     cout << "timestep"<<timestep<<endl;
     settingfile>>str;
     now.damp=atof(str);
-
+    settingfile>>str;
+    now.pusher=atof(str);
 
 // Open files to debug into.
     ofstream nanfile;
