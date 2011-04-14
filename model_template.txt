@@ -5,8 +5,8 @@ Float v2 // (starting) Speed 2
 Float l1 (mm) // Length 1
 Float l2 (mm) // Length 2
 Float rate // Framerate
-Bool nan // Bool: Is the nan-model turned on?
 Bool clear // Bool: Clear screen after each frame?
+Bool nan // Bool: Is the nan-model turned on?
 Bool dif // Bool: is the dif-model turned on?
 Bool exporttofile // Export to nan.txt and div.txt?
 Float timerate //dt = .. s
