@@ -1,3 +1,16 @@
+0.01
+0
+9.583865527
+0
+0.024
+0.136
+200
+1
+0
+1
+0
+0.00001
+0
 Float a1 //(rad) starting angle 1 
 Float a2 //(rad) Starting angle 2 
 Float v1 //(rad) Speed 1
@@ -11,25 +24,3 @@ Bool dif //(0/1) is the dif-model turned on?
 Bool exporttofile //(0/1) Export to nan.txt and div.txt?
 Float timerate //(s) dt in model
 Float damping (const?) //(/) what is the damping const?
-
-// Floats: The input is in floats, the model itself uses doubles.
-
-572-108
-8 R
-
-
-464
-8/464=0,0172413793
-
-
-0,0299699791 secs per frame
-
-0,0172413793/0,0299699791=0,575288332
-0,575288332*2*pi=3.6...
-
-707-66=641
-39 R
-39/641=0,0608424337
-23.857/715=0,0333664336
-0,0608424337/0,0333664336*2*pi=11,4571515
-
