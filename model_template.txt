@@ -1,13 +1,15 @@
-a1
-a2
-v1
-v2
-l1 (mm)
-l2 (mm)
-rate
-nan
-clear
-dif
-exporttofile
-timerate
-damping (const?)
+Float a1 // starting angle 1
+Float a2 // Starting angle 2
+Float v1 // Speed 1
+Float v2 // (starting) Speed 2
+Float l1 (mm) // Length 1
+Float l2 (mm) // Length 2
+Float rate // Framerate
+Bool nan // Bool: Is the nan-model turned on?
+Bool clear // Bool: Clear screen after each frame?
+Bool dif // Bool: is the dif-model turned on?
+Bool exporttofile // Export to nan.txt and div.txt?
+Float timerate //dt = .. s
+Float damping (const?) // what is the damping const?
+
+// Floats: The input is in floats, the model itself uses doubles.
