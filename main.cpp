@@ -191,11 +191,11 @@ int main(int argc, char *argv[]){
 // Calculate the next steps
     for(int i=1;i<(1/timestep)/rate;i++){
         if(nan)  {      now=calcnextStepNan(now,timestep);
-            if(exporttofile)   nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
+
         }
 
-    if(dif) {       now2=calcnextStepDif(now2,timestep);
-            if(exporttofile) diffile <<now2.now<<", "<<now2.l1*sin(now2.a1)+now2.l2*sin(now2.a2)<<", "<<now2.l1*cos(now2.a1)+now2.l2*cos(now2.a2)<< endl;}
+    if(dif) {  now2=calcnextStepDif(now2,timestep);
+           }
 
     }
          if(debug)   Debug(now,now2);
@@ -205,14 +205,14 @@ int main(int argc, char *argv[]){
         App.Draw(sf::Shape::Line(400, 300, 400+scale*now.l1*sin(now.a1), 300+scale*now.l1*cos(now.a1), 5, sf::Color::Red));
         App.Draw(sf::Shape::Circle(400, 300, 6, sf::Color::Yellow));
         App.Draw(sf::Shape::Line(400+scale*now.l1*sin(now.a1), 300+scale*now.l1*cos(now.a1),400+scale*now.l1*sin(now.a1)+scale*now.l2*sin(now.a2), 300+scale*now.l1*cos(now.a1)+scale*now.l2*cos(now.a2), 5, sf::Color::Green));
-
+nanfile <<now.now<<", "<<now.l1*sin(now.a1)+now.l2*sin(now.a2)<<", "<<now.l1*cos(now.a1)+now.l2*cos(now.a2)<< endl;
 
 
         App.Draw(sf::Shape::Circle(400+scale*now.l1*sin(now.a1)+scale*now.l2*sin(now.a2), 300+scale*now.l1*cos(now.a1)+scale*now.l2*cos(now.a2), 6, sf::Color::Blue));
 
     }
     if(dif){
-
+         if(exporttofile) diffile <<now2.now<<", "<<now2.l1*sin(now2.a1)+now2.l2*sin(now2.a2)<<", "<<now2.l1*cos(now2.a1)+now2.l2*cos(now2.a2)<< endl;
         App.Draw(sf::Shape::Line(400, 300, 400+scale*now2.l1*sin(now2.a1), 300+scale*now2.l1*cos(now2.a1), 5, sf::Color::Red));
         App.Draw(sf::Shape::Circle(400, 300, 6, sf::Color::Yellow));
         App.Draw(sf::Shape::Line(400+scale*now2.l1*sin(now2.a1), 300+scale*now2.l1*cos(now2.a1),400+scale*now2.l1*sin(now2.a1)+scale*now2.l2*sin(now2.a2), 300+scale*now2.l1*cos(now2.a1)+scale*now2.l2*cos(now2.a2), 5, sf::Color::Yellow));
