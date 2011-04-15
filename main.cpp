@@ -66,7 +66,7 @@ while(ang<0) ang += 2*pi;
 return ang;
 }
 
-stamp calcnextStepNan(stamp now, double timestep){
+stamp calcnextStep(stamp now, double timestep){
 pos pos;
 now.now=now.now+timestep;
 double vg=sin(now.a2)*pi*(6.02-pi)*sqrt(G/now.l2);
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]){
 
 // Calculate the next steps
     for(int i=1;i<(1/timestep)/rate;i++){
-        if(nan)  {      now=calcnextStepNan(now,timestep);
+        if(nan)  {      now=calcnextStep(now,timestep);
 
         }
 
