@@ -8,9 +8,9 @@
 1
 0
 1
-0
+1
 0.00001
-0
+150
 Float a1 //(rad) starting angle 1 
 Float a2 //(rad) Starting angle 2 
 Float v1 //(rad) Speed 1
