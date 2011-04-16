@@ -1,3 +1,29 @@
 <html><head><title>readme</title><style type="text/css">ol{margin:0;padding:0}p{margin:0}.c5{color:#000000;font-size:14pt;font-family:Arial;font-weight:bold}.c1{line-height:1.15;height:11pt;direction:ltr}.c4{width:468.0pt;background-color:#ffffff;padding:72.0pt 72.0pt 72.0pt 72.0pt}.c3{padding-top:14.0pt;margin:0;padding-bottom:4.0pt}.c0{color:#000000;font-size:11pt;font-family:Arial}.c2{line-height:1.15;direction:ltr}body{color:#000000;font-size:11pt;font-family:Arial}h1{color:#000000;font-size:24pt;margin:0;font-family:Arial;font-weight:bold;padding:0}h2{color:#000000;font-size:18pt;margin:0;font-family:Arial;font-weight:bold;padding:0}h3{color:#000000;font-size:14pt;margin:0;font-family:Arial;font-weight:bold;padding:0}h4{color:#000000;font-size:12pt;margin:0;font-family:Arial;font-weight:bold;padding:0}h5{color:#000000;font-size:11pt;margin:0;font-family:Arial;font-weight:bold;padding:0}h6{color:#000000;font-size:10pt;margin:0;font-family:Arial;font-weight:bold;padding:0}</style></head><body class="c4"><h3 class="c2 c3"><a name="h.au65w29tkoae"></a><span class="c5">Handleiding van het model</span></h3><p class="c2"><span class="c0">In het bestand model.txt kunnen de parameters van het model worden gewijzigd. De betekenissen van de parameters zijn te vinden in het bestand model_template.txt</span></p><p class="c2"><span class="c0">Het model kan worden gestart door Model.exe te uit te voeren.</span></p><p class="c1"><span class="c0"></span></p><p class="c2"><span class="c0">Het numerieke model staat in het bestand main.cpp. Er zijn 2 modellen: het dif-model en het nan-model. Het nan-model is het model dat Nander bedacht heeft. Dit model bleek niet te kloppen. Het dif-model is het model met de differentiaalvergelijking dat we uiteindelijk gebruikt hebben. Beide modellen kunnen aan- en uitgezet worden in model_template.exe. Na het uitvoeren van het model worden de resultaten opgeslagen in dif.pos en nan.pos.</span></p><p class="c1"><span class="c0"></span></p><p class="c2"><span class="c0">In de map Examples staan voorbeelden van parameters en resultaten die horen bij de metingen die we gedaan hebben. De parameters staan in de tekstbestanden en de resultaten in de csv-bestanden. Als bijvoorbeeld de parameters van nummer 1 worden ingevuld in model.txt kan het model de beweging voorspellen van de slinger met dezelfde beginwaarden als meting 1 die we bij het experiment hebben gedaan.
 
 Licensie van de code: Zlib.</span></p><p class="c1"><span class="c0"></span></p></body></html>
+
+/* main.cpp -- A program which is able to predict a certain type of powered pendula.
+  April 16, 2011
+
+  Copyright (C) 2011 Nander, Simon, Arjen
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+ Nander Voortman: nanderv@gmail.com
+
+
+*/
