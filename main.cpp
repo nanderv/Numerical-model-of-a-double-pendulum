@@ -76,9 +76,7 @@ stamp calcnextStepDif(stamp now, double timestep){
     return now;
 }
 
-/*
-Everything works except for one line.. It's clearly visible which one :)
-*/
+
 double normangle(double ang){
 while(ang>=2*pi)ang -=2*pi;
 while(ang<0) ang += 2*pi;
